@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ===================== -->
+    <!-- Todo List (List View) -->
+    <!-- ===================== -->
+    <record id="todolist_view_list" model="ir.ui.view">
+        <field name="name">todolist.view.list</field>
+        <field name="model">todolist</field>
+        <field name="arch" type="xml">
+            <list string="Todo List">
+                <field name="name"/>
+                <field name="start_date_time"/>
+                <field name="end_date_time"/>
+                <field name="state"/>
+                <field name="tags_ids" widget="many2many_tags"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ===================== -->
+    <!-- Todo List (Form View) -->
+    <!-- ===================== -->
+    <record id="todolist_view_form" model="ir.ui.view">
+        <field name="name">todolist.view.form</field>
+        <field name="model">todolist</field>
+        <field name="arch" type="xml">
+            <form string="Todo">
+
+                <!-- HEADER -->
+                <header>
+                    <field name="state"
+                           widget="statusbar"
+                           statusbar_visible="draft,in_progress,done"/>
+
+                    <!-- Progress -->
+                    <button name="action_progress"
+                            type="object"
+                            string="Progress"
+                            class="btn-primary"
+                            invisible="state != 'draft'"/>
+
+                    <!-- Done (โผล่เฉพาะติ๊กครบ) -->
+                    <button name="action_done"
+                            type="object"
+                            string="Done"
+                            class="btn-primary"
+                            invisible="not can_done"/>
+                </header>
+
+                <sheet>
+
+                    <!-- Title -->
+                    <group>
+                        <field name="name" readonly="state == 'done'"/>
+                    </group>
+
+                    <!-- Tags + Dates -->
+                    <group col="2">
+                        <group>
+                            <field name="tags_ids"
+                                   widget="many2many_tags"
+                                   readonly="state == 'done'"/>
+                        </group>
+                        <group>
+                            <field name="start_date_time"
+                                   readonly="state == 'done'"/>
+                            <field name="end_date_time"
+                                   readonly="state == 'done'"/>
+                        </group>
+                    </group>
+
+                    <!-- ===================== -->
+                    <!-- TABS -->
+                    <!-- ===================== -->
+                    <notebook>
+
+                        <!-- TAB 1 : Todo List -->
+                        <page string="List">
+                            <field name="line_ids"
+                                   readonly="state == 'done'">
+                                <list editable="bottom">
+                                    <field name="name"/>
+                                    <field name="description"/>
+                                    <field name="is_done"
+                                           invisible="parent_state != 'in_progress'"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <!-- TAB 2 : Attendee -->
+                        <page string="Attendee">
+                            <field name="attendee_ids"
+                                   readonly="state == 'done'">
+                                <list editable="bottom">
+                                    <field name="user_id"/>
+                                </list>
+                            </field>
+                        </page>
+
+                    </notebook>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ===================== -->
+    <!-- Action -->
+    <!-- ===================== -->
+    <record id="action_todolist" model="ir.actions.act_window">
+        <field name="name">Todo List</field>
+        <field name="res_model">todolist</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ===================== -->
+    <!-- Menu -->
+    <!-- ===================== -->
+    <menuitem
+        id="menu_todolist_root"
+        name="Todo List"
+        action="action_todolist"
+        sequence="10"/>
+
+</odoo>
