@@ -1,6 +1,6 @@
 # ToDo List Module for Odoo
 
-An Odoo module designed to streamline task management, categorize activities with tags, and ensure process integrity through sub-task validation.
+A simple module to manage todo lists with tasks, tags, and attendees, helping users track progress from draft to completion efficiently.
 
 ## Installation & Setup
 
